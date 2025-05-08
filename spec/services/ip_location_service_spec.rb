@@ -45,7 +45,8 @@ RSpec.describe IpLocationService do
       end
 
       it 'strips whitespace from IP before lookup' do
-        resp = stub_response(success?: true, code: 200, message: 'OK', body: { 'city' => 'TrimCity' }.to_json)
+        resp = stub_response(success?: true, code: 200, message: 'OK',
+                             body: { 'city' => 'TrimCity' }.to_json)
         allow(described_class).to receive(:request_api).with('1.2.3.4').and_return(resp)
 
         expect(Rails.cache).to receive(:write).with('ip:1.2.3.4', 'TrimCity', expires_in: expiry)
@@ -53,7 +54,8 @@ RSpec.describe IpLocationService do
       end
 
       it 'caches and returns postal when present' do
-        resp = stub_response(success?: true, code: 200, message: 'OK', body: { 'postal' => '12345' }.to_json)
+        resp = stub_response(success?: true, code: 200, message: 'OK',
+                             body: { 'postal' => '12345' }.to_json)
         allow(described_class).to receive(:request_api).with(ip).and_return(resp)
 
         expect(Rails.cache).to receive(:write).with(key, '12345', expires_in: expiry)
@@ -61,7 +63,8 @@ RSpec.describe IpLocationService do
       end
 
       it 'caches and returns city when postal missing' do
-        resp = stub_response(success?: true, code: 200, message: 'OK', body: { 'city' => 'TestCity' }.to_json)
+        resp = stub_response(success?: true, code: 200, message: 'OK',
+                             body: { 'city' => 'TestCity' }.to_json)
         allow(described_class).to receive(:request_api).with(ip).and_return(resp)
 
         expect(Rails.cache).to receive(:write).with(key, 'TestCity', expires_in: expiry)
@@ -77,7 +80,8 @@ RSpec.describe IpLocationService do
       end
 
       it 'caches and returns nil when API returns error key' do
-        resp = stub_response(success?: true, code: 200, message: 'OK', body: { 'error' => 'oops' }.to_json)
+        resp = stub_response(success?: true, code: 200, message: 'OK',
+                             body: { 'error' => 'oops' }.to_json)
         allow(described_class).to receive(:request_api).with(ip).and_return(resp)
 
         expect(Rails.cache).to receive(:write).with(key, nil, expires_in: expiry)

@@ -19,8 +19,8 @@ This guide covers the steps to get a minimal Ruby on Rails application running, 
 1. **Clone the repo**
 
    ```bash
-   git clone  my_app
-   cd my_app
+   git clone https://github.com/shimroz1992/weather_forecast.git
+   cd weather_forecast
    ```
 
 2. **Install gems**

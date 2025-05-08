@@ -90,7 +90,8 @@ RSpec.describe WeatherFetcher do
         key = 'weather:stalecity'
         Rails.cache.write(
           key,
-          { data: { temp: 0 }, fetched_at: Time.current - (WeatherFetcher::CACHE_EXPIRY + 1.minute) },
+          { data: { temp: 0 },
+            fetched_at: Time.current - (WeatherFetcher::CACHE_EXPIRY + 1.minute) },
           expires_in: WeatherFetcher::CACHE_EXPIRY
         )
 

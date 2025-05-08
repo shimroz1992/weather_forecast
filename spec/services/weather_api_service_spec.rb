@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # spec/services/weather_api_service_spec.rb
 require 'rails_helper'
 
@@ -11,38 +13,38 @@ RSpec.describe WeatherApiService, type: :service do
       let(:api_response) do
         {
           'location' => {
-            'name'      => 'TestCity',
-            'country'   => 'TestLand',
+            'name' => 'TestCity',
+            'country' => 'TestLand',
             'localtime' => '2025-05-08 10:00'
           },
           'current' => {
-            'temp_c'   => 22,
-            'condition'=> { 'text' => 'Sunny', 'icon' => 'icon_url' }
+            'temp_c' => 22,
+            'condition' => { 'text' => 'Sunny', 'icon' => 'icon_url' }
           },
           'forecast' => {
             'forecastday' => [
               {
                 'date' => '2025-05-08',
-                'day'  => {
-                  'maxtemp_c'=> 25,
-                  'mintemp_c'=> 15,
-                  'condition'=> { 'text' => 'Clear', 'icon' => 'icon2' }
+                'day' => {
+                  'maxtemp_c' => 25,
+                  'mintemp_c' => 15,
+                  'condition' => { 'text' => 'Clear', 'icon' => 'icon2' }
                 },
                 'hour' => [
                   {
-                    'time'      => '2025-05-08 10:00',
-                    'temp_c'    => 22,
+                    'time' => '2025-05-08 10:00',
+                    'temp_c' => 22,
                     'condition' => { 'text' => 'Sunny', 'icon' => 'icon_url' }
                   },
                   {
-                    'time'      => '2025-05-08 12:00',
-                    'temp_c'    => 24,
+                    'time' => '2025-05-08 12:00',
+                    'temp_c' => 24,
                     'condition' => { 'text' => 'Hot', 'icon' => 'icon3' }
                   },
                   # outside interval (e.g. 24h later) should be ignored
                   {
-                    'time'      => '2025-05-09 10:00',
-                    'temp_c'    => 18,
+                    'time' => '2025-05-09 10:00',
+                    'temp_c' => 18,
                     'condition' => { 'text' => 'Cool', 'icon' => 'icon4' }
                   }
                 ]
@@ -55,9 +57,9 @@ RSpec.describe WeatherApiService, type: :service do
       let(:response_double) do
         double(
           success?: true,
-          code:     200,
-          message:  'OK',
-          body:     api_response.to_json
+          code: 200,
+          message: 'OK',
+          body: api_response.to_json
         )
       end
 
@@ -80,11 +82,11 @@ RSpec.describe WeatherApiService, type: :service do
 
         # forecast_day
         expect(result[:forecast_day]).to eq(
-          date:      '2025-05-08',
+          date: '2025-05-08',
           condition: 'Clear',
-          icon:      'icon2',
-          high:      25,
-          low:       15
+          icon: 'icon2',
+          high: 25,
+          low: 15
         )
 
         # hourly_forecast only includes the two entries at 10:00 and 12:00
@@ -155,7 +157,7 @@ RSpec.describe WeatherApiService, type: :service do
           WeatherApiService::FORECAST_PATH,
           query: {
             key: api_key,
-            q:   location,
+            q: location,
             aqi: 'no'
           }
         ).and_return(:some_response)
