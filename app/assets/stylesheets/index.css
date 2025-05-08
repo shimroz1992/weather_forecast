@@ -1,0 +1,93 @@
+/* weather.css */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to top, #a0c1ff, #ffffff);
+    color: #333;
+    padding: 20px;
+    margin: 0;
+  }
+  
+  h1, h2, h3 {
+    text-align: center;
+    color: #114488;
+  }
+  
+  form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  input[type="text"], input[type="submit"] {
+    padding: 10px;
+    border: 1px solid #888;
+    border-radius: 5px;
+  }
+  
+  button {
+    margin: 0 auto;
+    display: block;
+    padding: 10px 15px;
+    background-color: #337ab7;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  li {
+    background: #f4f4f4;
+    margin: 8px auto;
+    max-width: 600px;
+    padding: 10px;
+    border-left: 5px solid #337ab7;
+    border-radius: 5px;
+  }
+  
+  canvas {
+    display: block;
+    margin: 40px auto;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-width: 90%;
+    height: auto;
+  }
+
+  .weather-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: sans-serif;
+  }
+  
+  .weather-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .weather-info {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .forecast-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .forecast-list li {
+    width: 48%;
+    margin-bottom: 10px;
+    background-color: #f0f8ff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px #ccc;
+  }

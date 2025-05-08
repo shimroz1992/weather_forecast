@@ -1,0 +1,91 @@
+<div class="weather-container">
+<h1 class="weather-header">Weather Forecast</h1>
+
+<%= form_with url: root_path, method: :get, local: true do %>
+    <label>Enter City, Country, or Zip:</label>
+  <%= text_field_tag :location, nil, placeholder: "e.g. Nagpur or 110001" %>
+    <%= submit_tag "Get Weather" %>
+  <% end %>
+  
+  <% if @weather %>
+  <div class="weather-info">
+  <h2>Weather in <%= @weather[:city] %>, <%= @weather[:country] %></h2>
+  <p><img src="<%= @weather[:icon] %>" alt="Weather icon" /></p>
+  <p>Current Temperature: <%= @weather[:temperature] %>°C</p>
+  <p>Condition: <%= @weather[:condition] %></p>
+  <p>High: <%= @weather[:high] %>°C | Low: <%= @weather[:low] %>°C</p>
+  <p><em><%= @from_cache ? "Result from cache" : "Live result" %></em></p>
+  </div>
+  
+  <% if @weather[:hourly_forecast].present? %>
+      <h3 class="weather-header">Upcoming Today's Forecast:</h3>
+      <ul class="forecast-list">
+        <% @weather[:hourly_forecast].each do |hour| %>
+          <li>
+            <strong><%= hour[:time] %></strong> - <%= hour[:condition] %>
+            <img src="<%= hour[:icon] %>" alt="Hourly icon" />
+            (<%= hour[:temp_c] %>°C)
+          </li>
+        <% end %>
+      </ul>
+    <canvas id="tempChart" width="800" height="400"></canvas>
+  
+    <script>
+      document.addEventListener("turbo:load", drawChart);
+      document.addEventListener("DOMContentLoaded", drawChart);
+  
+      function drawChart() {
+        const data = <%= raw @weather[:hourly_forecast].map { |h| { time: h[:time].split(' ').last, temp: h[:temp_c] } }.to_json %>;
+        const canvas = document.getElementById("tempChart");
+        if (!canvas || data.length === 0) return;
+  
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const padding = 50;
+        const graphWidth = canvas.width - 2 * padding;
+        const graphHeight = canvas.height - 2 * padding;
+  
+        const temps = data.map(d => d.temp);
+        const times = data.map(d => d.time);
+  
+        const maxTemp = 100;
+        const minTemp = 0;
+        const yScale = graphHeight / (maxTemp - minTemp || 1);
+        const xStep = graphWidth / (data.length - 1 || 1);
+
+        ctx.beginPath();
+        ctx.moveTo(padding, padding);
+        ctx.lineTo(padding, canvas.height - padding);
+        ctx.lineTo(canvas.width - padding, canvas.height - padding);
+        ctx.strokeStyle = "#333";
+        ctx.stroke();
+
+        ctx.beginPath();
+        data.forEach((point, i) => {
+          const x = padding + i * xStep;
+          const y = canvas.height - padding - (point.temp - minTemp) * yScale;
+  
+          i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+
+          ctx.fillStyle = "#337ab7";
+          ctx.beginPath();
+          ctx.arc(x, y, 4, 0, 2 * Math.PI);
+          ctx.fill();
+
+          ctx.fillStyle = "#000";
+          ctx.font = "12px sans-serif";
+          ctx.fillText(times[i], x - 15, canvas.height - padding + 20);
+        });
+        ctx.strokeStyle = "#337ab7";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        for (let t = 0; t <= 100; t += 10) {
+          const y = canvas.height - padding - (t - minTemp) * yScale;
+          ctx.fillText(`${t}°C`, padding - 40, y + 3);
+        }
+      }
+    </script>
+  <% end %>
+<% end %>
+</div>
